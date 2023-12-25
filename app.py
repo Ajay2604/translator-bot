@@ -62,7 +62,6 @@ configuration = Configuration(
 @app.route('/')
 def homepage():
     the_time = datetime.now().strftime("%m-%d-%Y %H:%M%p")
-    print("get")
     return """
     <h1>Hello Translator-Bot</h1>
     <p>It is currently {time}.</p>
@@ -74,7 +73,6 @@ def homepage():
 @app.route("/callback", methods=['POST'])
 def callback():
     signature = request.headers['X-Line-Signature']
-    print("post")
     # get request body as text
     body = request.get_data(as_text=True)
     app.logger.info("Request body: " + body)
@@ -96,6 +94,8 @@ def callback():
             # print(event)
             msg = event.message.text
             app.logger.info(msg)
+            print(msg)
+            print(event.reply_token)
             line_bot_api.reply_message_with_http_info(
                 ReplyMessageRequest(
                     reply_token=event.reply_token,
