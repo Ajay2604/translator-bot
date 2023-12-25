@@ -93,7 +93,9 @@ def callback():
             continue
         with ApiClient(configuration) as api_client:
             line_bot_api = MessagingApi(api_client)
-            print(event)
+            # print(event)
+            msg = event.message.text
+            app.logger.info(msg)
             line_bot_api.reply_message_with_http_info(
                 ReplyMessageRequest(
                     reply_token=event.reply_token,
