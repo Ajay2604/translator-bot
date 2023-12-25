@@ -91,7 +91,7 @@ def callback():
             # continue
         if not isinstance(event.message, TextMessageContent):
             print("not a TextMessageContent")
-            continue
+            # continue
         with ApiClient(configuration) as api_client:
             line_bot_api = MessagingApi(api_client)
             # print(event)
