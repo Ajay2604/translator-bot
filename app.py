@@ -16,6 +16,11 @@
 import os
 import sys
 from argparse import ArgumentParser
+from googletrans import Translator
+translator = Translator()
+def translate_text(text):
+    en_text = translator.translate(text, dest='en').text
+    return en_text
 
 from flask import Flask, request, abort
 from linebot import (
@@ -92,6 +97,9 @@ def callback():
         if not isinstance(event.message, TextMessageContent):
             print("not a TextMessageContent")
             # continue
+        if(event.message.text):
+                text = event.message.text
+                translated = translate_text(text)
         with ApiClient(configuration) as api_client:
             line_bot_api = MessagingApi(api_client)
             # print(event)
@@ -102,7 +110,7 @@ def callback():
             line_bot_api.reply_message_with_http_info(
                 ReplyMessageRequest(
                     reply_token=event.reply_token,
-                    messages=[TextMessage(text=event.message.text)]
+                    messages=[TextMessage(text=translated)]
                 )
             )
 
