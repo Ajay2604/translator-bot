@@ -19,9 +19,9 @@ from argparse import ArgumentParser
 from googletrans import Translator
 translator = Translator()
 def translate_text(text):
-    print(text)
+    print("in function", text)
     en_text = translator.translate(text, dest='en').text
-    print(en_text)
+    print("in function out", en_text)
     return en_text
 
 from flask import Flask, request, abort
@@ -91,7 +91,6 @@ def callback():
         abort(400)
 
     # if event is MessageEvent and message is TextMessage, then echo text
-    print(events)
     for event in events:
         if not isinstance(event, MessageEvent):
             print("not a MessageEvent")
@@ -101,7 +100,8 @@ def callback():
             # continue
         print("event==>", event)
         text = event.message.text
-        if(text):
+        print("text==>", text)
+        if(text is not None):
                 translated = translate_text(text)
                 print("translated==>",translated)
         with ApiClient(configuration) as api_client:
