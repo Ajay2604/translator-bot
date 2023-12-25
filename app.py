@@ -99,20 +99,17 @@ def callback():
         if not isinstance(event.message, TextMessageContent):
             print("not a TextMessageContent")
             # continue
+        print("event==>", event)
         text = event.message.text
         if(text):
                 translated = translate_text(text)
+                print("translated==>",translated)
         with ApiClient(configuration) as api_client:
             line_bot_api = MessagingApi(api_client)
-            # print(event)
-            msg = event.message.text
-            app.logger.info(msg)
-            print(msg)
-            print(event.reply_token)
             line_bot_api.reply_message_with_http_info(
                 ReplyMessageRequest(
                     reply_token=event.reply_token,
-                    messages=[TextMessage(text=translated)]
+                    messages=[TextMessage(text=text)]
                 )
             )
 
