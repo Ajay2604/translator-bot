@@ -19,10 +19,13 @@ from argparse import ArgumentParser
 from googletrans import Translator
 translator = Translator()
 def translate_text(text):
-    print("in function", text)
-    en_text = translator.translate(text, dest='en').text
-    print("in function out", en_text)
-    return en_text
+    srcLang = translator.detect(text).lang
+    if(srcLang=="ko"):
+        return translator.translate(text, dest='en').text
+    elif (srcLang=="en"):
+        return translator.translate(text, dest='ko').text
+    else:
+        return "Langauge is not setup for detected language"
 
 from flask import Flask, request, abort
 from linebot import (
