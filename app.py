@@ -101,6 +101,7 @@ def callback():
         print("event==>", event)
         text = event.message.text
         print("text==>", text)
+        translated = ""
         if(text is not None):
                 translated = translate_text(text)
                 print("translated==>",translated)
@@ -109,7 +110,7 @@ def callback():
             line_bot_api.reply_message_with_http_info(
                 ReplyMessageRequest(
                     reply_token=event.reply_token,
-                    messages=[TextMessage(text=text)]
+                    messages=[TextMessage(text=translated)]
                 )
             )
 
