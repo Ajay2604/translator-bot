@@ -62,7 +62,7 @@ configuration = Configuration(
 @app.route('/')
 def homepage():
     the_time = datetime.now().strftime("%m-%d-%Y %H:%M%p")
-
+    print("get")
     return """
     <h1>Hello Translator-Bot</h1>
     <p>It is currently {time}.</p>
@@ -74,7 +74,7 @@ def homepage():
 @app.route("/callback", methods=['POST'])
 def callback():
     signature = request.headers['X-Line-Signature']
-
+    print("post")
     # get request body as text
     body = request.get_data(as_text=True)
     app.logger.info("Request body: " + body)
