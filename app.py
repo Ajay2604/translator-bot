@@ -1,29 +1,63 @@
-import os, re, json
-from datetime import datetime, date, timedelta
+# -*- coding: utf-8 -*-
+
+#  Licensed under the Apache License, Version 2.0 (the "License"); you may
+#  not use this file except in compliance with the License. You may obtain
+#  a copy of the License at
+#
+#       https://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+#  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+#  License for the specific language governing permissions and limitations
+#  under the License.
+
+
+import os
+import sys
+from argparse import ArgumentParser
+
 from flask import Flask, request, abort
-from googletrans import Translator
-import requests
 from linebot import (
-    LineBotApi, WebhookHandler
+    WebhookParser
 )
-from linebot.exceptions import (
+from linebot.v3.exceptions import (
     InvalidSignatureError
 )
-from linebot.models import (
-    MessageEvent, TextMessage, TextSendMessage,
+from linebot.v3.webhooks import (
+    MessageEvent,
+    TextMessageContent,
 )
+from linebot.v3.messaging import (
+    Configuration,
+    ApiClient,
+    MessagingApi,
+    ReplyMessageRequest,
+    TextMessage
+)
+from datetime import datetime, date, timedelta
 
 app = Flask(__name__)
-translator = Translator()
 
+# get channel_secret and channel_access_token from your environment variable
 # channel_secret = os.getenv('LINE_CHANNEL_SECRET', None)
 channel_secret = "08b360ffb5ce55a583e1714f9ec01639"
 
 # channel_access_token = os.getenv('LINE_CHANNEL_ACCESS_TOKEN', None)
 channel_access_token = "b6QCoss7UIsWWEv0YjpiUZlRFGTEKOGxrQJ6ate4xMOfjRTaJSlaLP/yWi1G9Ry9y231IeERlfPgDy9exgigZYiheJy9wdGoe2+owPc1u1xK8PagSnpcll1dEnG6Ge4li46MwvbH+B1N+6jOGpfz4QdB04t89/1O/w1cDnyilFU="
 
-line_bot_api = LineBotApi(channel_access_token)
-handler = WebhookHandler(channel_secret)
+if channel_secret is None:
+    print('Specify LINE_CHANNEL_SECRET as environment variable.')
+    sys.exit(1)
+if channel_access_token is None:
+    print('Specify LINE_CHANNEL_ACCESS_TOKEN as environment variable.')
+    sys.exit(1)
+
+parser = WebhookParser(channel_secret)
+
+configuration = Configuration(
+    access_token=channel_access_token
+)
 
 @app.route('/')
 def homepage():
@@ -36,35 +70,45 @@ def homepage():
     <img src="http://loremflickr.com/600/400">
     """.format(time=the_time)
 
+
 @app.route("/callback", methods=['POST'])
 def callback():
-    # get X-Line-Signature header value
     signature = request.headers['X-Line-Signature']
 
     # get request body as text
     body = request.get_data(as_text=True)
     app.logger.info("Request body: " + body)
 
-    # handle webhook body
+    # parse webhook body
     try:
-        handler.handle(body, signature)
+        events = parser.parse(body, signature)
     except InvalidSignatureError:
         abort(400)
 
+    # if event is MessageEvent and message is TextMessage, then echo text
+    for event in events:
+        if not isinstance(event, MessageEvent):
+            continue
+        if not isinstance(event.message, TextMessageContent):
+            continue
+        with ApiClient(configuration) as api_client:
+            line_bot_api = MessagingApi(api_client)
+            line_bot_api.reply_message_with_http_info(
+                ReplyMessageRequest(
+                    reply_token=event.reply_token,
+                    messages=[TextMessage(text=event.message.text)]
+                )
+            )
+
     return 'OK'
 
-def translate_text(text):
-    en_text = translator.translate(text, dest='en').text
-    return en_text
-
-@handler.add(MessageEvent, message=TextMessage)
-def handle_message(event):
-    text = event.message.text
-    translated = translate_text(text)
-    line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text=translated))
-    
 
 if __name__ == "__main__":
-    app.run(debug=True, use_reloader=True)
+    arg_parser = ArgumentParser(
+        usage='Usage: python ' + __file__ + ' [--port <port>] [--help]'
+    )
+    arg_parser.add_argument('-p', '--port', type=int, default=8000, help='port')
+    arg_parser.add_argument('-d', '--debug', default=False, help='debug')
+    options = arg_parser.parse_args()
+
+    app.run(debug=options.debug, port=options.port)
