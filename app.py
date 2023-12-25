@@ -1,31 +1,8 @@
-# -*- coding: utf-8 -*-
-
-#  Licensed under the Apache License, Version 2.0 (the "License"); you may
-#  not use this file except in compliance with the License. You may obtain
-#  a copy of the License at
-#
-#       https://www.apache.org/licenses/LICENSE-2.0
-#
-#  Unless required by applicable law or agreed to in writing, software
-#  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
-#  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
-#  License for the specific language governing permissions and limitations
-#  under the License.
-
-
 import os
 import sys
 from argparse import ArgumentParser
 from googletrans import Translator
 translator = Translator()
-def translate_text(text):
-    srcLang = translator.detect(text).lang
-    if(srcLang=="ko"):
-        return translator.translate(text, dest='en').text
-    elif (srcLang=="en"):
-        return translator.translate(text, dest='ko').text
-    else:
-        return "Langauge is not setup for detected language"
 
 from flask import Flask, request, abort
 from linebot import (
@@ -51,10 +28,8 @@ app = Flask(__name__)
 
 # get channel_secret and channel_access_token from your environment variable
 channel_secret = os.getenv('LINE_CHANNEL_SECRET', None)
-# channel_secret = "08b360ffb5ce55a583e1714f9ec01639"
 
 channel_access_token = os.getenv('LINE_CHANNEL_ACCESS_TOKEN', None)
-# channel_access_token = "b6QCoss7UIsWWEv0YjpiUZlRFGTEKOGxrQJ6ate4xMOfjRTaJSlaLP/yWi1G9Ry9y231IeERlfPgDy9exgigZYiheJy9wdGoe2+owPc1u1xK8PagSnpcll1dEnG6Ge4li46MwvbH+B1N+6jOGpfz4QdB04t89/1O/w1cDnyilFU="
 
 if channel_secret is None:
     print('Specify LINE_CHANNEL_SECRET as environment variable.')
@@ -69,9 +44,21 @@ configuration = Configuration(
     access_token=channel_access_token
 )
 
+def translate_text(text): # translate text to/from Korean and English
+    srcLang = translator.detect(text).lang # detect the source language
+    if(srcLang=="ko"): # if the source language is Korean
+        return translator.translate(text, dest='en').text # translate to English
+    elif (srcLang=="en"): # if the source language is English
+        return translator.translate(text, dest='ko').text # translate to Korean
+    else: # if the source language is neither Korean nor English
+        return "Language is not set up for detected language" # return an error message
+
 @app.route('/')
 def homepage():
+    # Get current time
     the_time = datetime.now().strftime("%m-%d-%Y %H:%M%p")
+    
+    # Render HTML template with time and image
     return """
     <h1>Hello Translator-Bot</h1>
     <p>It is currently {time}.</p>
@@ -93,21 +80,21 @@ def callback():
     except InvalidSignatureError:
         abort(400)
 
-    # if event is MessageEvent and message is TextMessage, then echo text
+    # if event is MessageEvent and message is TextMessage, then echp text // removed echo
     for event in events:
-        if not isinstance(event, MessageEvent):
-            print("not a MessageEvent")
-            # continue
-        if not isinstance(event.message, TextMessageContent):
-            print("not a TextMessageContent")
-            # continue
-        print("event==>", event)
+        # if not isinstance(event, MessageEvent):
+        #     print("not a MessageEvent")
+        #     # continue
+        # if not isinstance(event.message, TextMessageContent):
+        #     print("not a TextMessageContent")
+        #     # continue
+        # print("event==>", event)
         text = event.message.text
-        print("text==>", text)
+        # print("text==>", text)
         translated = ""
         if(text is not None):
                 translated = translate_text(text)
-                print("translated==>",translated)
+                # print("translated==>",translated)
         with ApiClient(configuration) as api_client:
             line_bot_api = MessagingApi(api_client)
             line_bot_api.reply_message_with_http_info(
