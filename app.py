@@ -119,7 +119,7 @@ def callback():
         if(text is not None):
                 translated = translate_text(text)
                 # print("translated==>",translated)
-        mes = TextMessage(TextMessage)
+        mes = TextMessage(text=translated)
         print("mes",mes)
         mes = create_checkbox_message()
         print("mes",mes)
