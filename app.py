@@ -11,10 +11,10 @@ from linebot import (
 from linebot.v3.exceptions import (
     InvalidSignatureError
 )
-from linebot.v3.webhooks import (
-    MessageEvent,
-    TextMessageContent,
-)
+# from linebot.v3.webhooks import (
+#     MessageEvent,
+#     TextMessageContent,
+# )
 from linebot.v3.messaging import (
     Configuration,
     ApiClient,
@@ -88,7 +88,7 @@ def callback():
         # if not isinstance(event.message, TextMessageContent):
         #     print("not a TextMessageContent")
         #     # continue
-        # print("event==>", event)
+        print("event==>", event)
         text = event.message.text
         # print("text==>", text)
         translated = ""
