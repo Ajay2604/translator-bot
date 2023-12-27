@@ -119,14 +119,17 @@ def callback():
         if(text is not None):
                 translated = translate_text(text)
                 # print("translated==>",translated)
+        mes = TextMessage(TextMessage)
+        print("mes",mes)
         mes = create_checkbox_message()
+        print("mes",mes)
         print("out the template")
         with ApiClient(configuration) as api_client:
             line_bot_api = MessagingApi(api_client)
             line_bot_api.reply_message_with_http_info(
                 ReplyMessageRequest(
                     reply_token=event.reply_token,
-                    # messages=[TextMessage(text=translated),create_checkbox_message()]
+                    # messages=[TextMessage(TextMessage),create_checkbox_message()]
                     messages=[mes]
                 )
             )
