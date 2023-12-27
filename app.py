@@ -20,11 +20,35 @@ from linebot.v3.messaging import (
     ApiClient,
     MessagingApi,
     ReplyMessageRequest,
-    TextMessage
+    TextMessage,
+    TemplateMessage,
+    ConfirmTemplate,
+    PostbackAction    
 )
 from datetime import datetime, date, timedelta
 
 app = Flask(__name__)
+
+def create_checkbox_message():
+    message = TemplateMessage(
+        alt_text='Checkbox Options',
+        template=ConfirmTemplate(
+            text='Please select your options.',
+            actions=[
+                PostbackAction(label='Option 1', data='option_1', text='Option 1'),
+                PostbackAction(label='Option 2', data='option_2', text='Option 2'),
+                PostbackAction(label='Option 3', data='option_3', text='Option 3'),
+                PostbackAction(label='Option 4', data='option_4', text='Option 4'),
+                PostbackAction(label='Option 5', data='option_5', text='Option 5'),
+                PostbackAction(label='Option 6', data='option_6', text='Option 6'),
+                PostbackAction(label='Option 7', data='option_7', text='Option 7'),
+                PostbackAction(label='Option 8', data='option_8', text='Option 8'),
+                PostbackAction(label='Option 9', data='option_9', text='Option 9'),
+                PostbackAction(label='Option 10', data='option_10', text='Option 10'),
+            ]
+        )
+    )
+    return message
 
 # get channel_secret and channel_access_token from your environment variable
 channel_secret = os.getenv('LINE_CHANNEL_SECRET', None)
@@ -73,7 +97,6 @@ def callback():
     # get request body as text
     body = request.get_data(as_text=True)
     app.logger.info("Request body: " + body)
-    print(body)
     # parse webhook body
     try:
         events = parser.parse(body, signature)
@@ -100,7 +123,8 @@ def callback():
             line_bot_api.reply_message_with_http_info(
                 ReplyMessageRequest(
                     reply_token=event.reply_token,
-                    messages=[TextMessage(text=translated)]
+                    messages=[TextMessage(text=translated),create_checkbox_message()]
+                    # messages=create_checkbox_message()
                 )
             )
 
