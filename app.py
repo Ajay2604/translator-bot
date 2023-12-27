@@ -124,7 +124,7 @@ def callback():
                 ReplyMessageRequest(
                     reply_token=event.reply_token,
                     # messages=[TextMessage(text=translated),create_checkbox_message()]
-                    messages=create_checkbox_message()
+                    messages=[create_checkbox_message()]
                 )
             )
 
