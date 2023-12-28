@@ -1,20 +1,20 @@
 import os
 import sys
 from argparse import ArgumentParser
-from googletrans import Translator
-translator = Translator()
+
+from handlers.database import db
+from handlers.prefered_language_handler import get_prefered_language, lang_update
+from handlers.translate_text import translate_text, print_supported_languages
 
 from flask import Flask, request, abort
+
 from linebot import (
     WebhookParser
 )
 from linebot.v3.exceptions import (
     InvalidSignatureError
 )
-# from linebot.v3.webhooks import (
-#     MessageEvent,
-#     TextMessageContent,
-# )
+
 from linebot.v3.messaging import (
     Configuration,
     ApiClient,
@@ -28,19 +28,6 @@ from linebot.v3.messaging import (
 from datetime import datetime, date, timedelta
 
 app = Flask(__name__)
-
-def create_checkbox_message():
-    print("in the template")
-    message = TemplateMessage(
-        alt_text='Checkbox Options',
-        template=ConfirmTemplate(
-            text='Please select your options.',
-            actions=[
-                PostbackAction(display_text='Option 1', data='option_1', text='Option 1')
-            ]
-        )
-    )
-    return message
 
 # get channel_secret and channel_access_token from your environment variable
 channel_secret = os.getenv('LINE_CHANNEL_SECRET', None)
@@ -60,14 +47,6 @@ configuration = Configuration(
     access_token=channel_access_token
 )
 
-def translate_text(text): # translate text to/from Korean and English
-    srcLang = translator.detect(text).lang # detect the source language
-    if(srcLang=="ko"): # if the source language is Korean
-        return translator.translate(text, dest='en').text # translate to English
-    elif (srcLang=="en"): # if the source language is English
-        return translator.translate(text, dest='ko').text # translate to Korean
-    else: # if the source language is neither Korean nor English
-        return "Language is not set up for detected language" # return an error message
 
 @app.route('/')
 def homepage():
@@ -95,41 +74,36 @@ def callback():
     except InvalidSignatureError:
         abort(400)
 
-    # if event is MessageEvent and message is TextMessage, then echp text // removed echo
+    # if event is MessageEvent and message is TextMessage, then echo text //v2- removed echo
     for event in events:
-        # if not isinstance(event, MessageEvent):
-        #     print("not a MessageEvent")
-        #     # continue
-        # if not isinstance(event.message, TextMessageContent):
-        #     print("not a TextMessageContent")
-        #     # continue
         print("event==>", event)
+        langs = get_prefered_language(event.source)
+        if not langs:
+            # ask for language preference for first time
+            return
+        
+        # check /lang command
         text = event.message.text
-        # print("text==>", text)
-        translated = ""
-        if(text is not None):
-                translated = translate_text(text)
-                # print("translated==>",translated)
-        mes = TextMessage(text=translated)
-        # print("mes",mes)
-        mes = create_checkbox_message()
-        # print("mes",mes)
-        print("out the template")
+        if(text is None):
+            return
+        if text[0,4]=="/lang":
+            res = lang_update(event.source,text)
+            print ("res==>", res)
+            if not res:
+                translated = "Language setting failed try again with /lang \ne.g /lang en co "
+    
+        elif text[0,4]=="/help":
+            translated = f"set language by Giving Command /lang <> <>\: {print_supported_languages()}"
+        else:
+            #normal translation function
+            translated = translate_text(text,langs)
+            
         with ApiClient(configuration) as api_client:
             line_bot_api = MessagingApi(api_client)
             res = line_bot_api.reply_message_with_http_info(
                 ReplyMessageRequest(
                     reply_token=event.reply_token,
-                    # messages=[TextMessage(TextMessage),create_checkbox_message()]
-                    messages=[TemplateMessage(
-                                alt_text='Checkbox Options',
-                                template=ConfirmTemplate(
-                                    text='Please select your options.',
-                                    actions=[
-                                        PostbackAction(display_text='Option 1', data='option_1', text='Option 1')
-                                    ]
-                                )
-                            )]
+                    messages=[TextMessage(text=translated)]
                 )
             )
             print("res==>", res)

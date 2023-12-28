@@ -78,6 +78,7 @@ target/
 env8
 transtrial.py
 app2.py
+pytesting.py
 
 # celery beat schedule file
 celerybeat-schedule
