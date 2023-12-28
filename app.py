@@ -64,7 +64,7 @@ def homepage():
 
 
 @app.route("/callback", methods=['POST'])
-async def callback():
+def callback():
     signature = request.headers['X-Line-Signature']
     # get request body as text
     body = request.get_data(as_text=True)
@@ -79,11 +79,12 @@ async def callback():
     for event in events:
         translated = ""
         print("event==>", event)
-        langs = await get_prefered_language(event.source)
+        langs = get_prefered_language(event.source)
         print("langs@81",langs)
         if not langs:
             # ask for language preference for first time
             translated = "Language setting failed try again with /lang \ne.g /lang en co "
+            print("not langs")
             return
         
         # check /lang command
@@ -100,6 +101,7 @@ async def callback():
             translated = f"set language by Giving Command /lang <> <> \n{print_supported_languages()}"
         else:
             #normal translation function
+            print("else")
             translated = translate_text(text,langs)
             
         with ApiClient(configuration) as api_client:
@@ -124,5 +126,3 @@ if __name__ == "__main__":
     options = arg_parser.parse_args()
 
     app.run(debug=options.debug, port=options.port)
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(callback())
