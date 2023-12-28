@@ -76,10 +76,13 @@ def callback():
 
     # if event is MessageEvent and message is TextMessage, then echo text //v2- removed echo
     for event in events:
+        translated = ""
         print("event==>", event)
         langs = get_prefered_language(event.source)
+        print("langs@81",langs)
         if not langs:
             # ask for language preference for first time
+            translated = "Language setting failed try again with /lang \ne.g /lang en co "
             return
         
         # check /lang command
