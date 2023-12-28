@@ -30,7 +30,7 @@ def translate_text(text, langs): # translate text to/from Korean and English
 
     return translation.text
 
-# usage
-text = "Hello, world!"
-langs = ['en','ko'] # from English to Korean
-print(translate_text(text, langs))
+# # usage
+# text = "Hello, world!"
+# langs = ['en','ko'] # from English to Korean
+# print(translate_text(text, langs))

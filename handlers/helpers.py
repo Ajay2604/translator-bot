@@ -13,6 +13,6 @@ def parse_langs(input_str):
     return langs
 
 #usage
-str = "/lang   en  ko jp"
-langs = parse_langs(str)
-print(langs)
+# str = "/lang   en  ko jp"
+# langs = parse_langs(str)
+# print(langs)

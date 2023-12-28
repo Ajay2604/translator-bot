@@ -93,7 +93,7 @@ def callback():
                 translated = "Language setting failed try again with /lang \ne.g /lang en co "
     
         elif text[0,4]=="/help":
-            translated = f"set language by Giving Command /lang <> <>\: {print_supported_languages()}"
+            translated = f"set language by Giving Command /lang <> <> \n{print_supported_languages()}"
         else:
             #normal translation function
             translated = translate_text(text,langs)
