@@ -1,6 +1,7 @@
 import os
 import sys
 from argparse import ArgumentParser
+import asyncio
 
 from handlers.database import db
 from handlers.prefered_language_handler import get_prefered_language, lang_update
@@ -63,7 +64,7 @@ def homepage():
 
 
 @app.route("/callback", methods=['POST'])
-def callback():
+async def callback():
     signature = request.headers['X-Line-Signature']
     # get request body as text
     body = request.get_data(as_text=True)
@@ -78,7 +79,7 @@ def callback():
     for event in events:
         translated = ""
         print("event==>", event)
-        langs = get_prefered_language(event.source)
+        langs = await get_prefered_language(event.source)
         print("langs@81",langs)
         if not langs:
             # ask for language preference for first time
@@ -123,3 +124,5 @@ if __name__ == "__main__":
     options = arg_parser.parse_args()
 
     app.run(debug=options.debug, port=options.port)
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(callback())
