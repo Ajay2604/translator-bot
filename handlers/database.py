@@ -47,11 +47,11 @@ class Database:
         await self.groupCol.insert_one(group)
 
     async def is_user_exist(self, id):
-        user = await self.userCol.find_one({'id': int(id)})
+        user = await self.userCol.find_one({'id': id})
         return user if user else False
 
     async def is_group_exist(self, id):# group 
-        group = await self.groupCol.find_one({'id': int(id)})
+        group = await self.groupCol.find_one({'id': id})
         return group if group else False
     
     async def user_langs_update(self, id, langs):# user
@@ -70,7 +70,7 @@ class Database:
         return all_users
 
     async def delete_user(self, user_id):
-        await self.userCol.delete_many({'id': int(user_id)})
+        await self.userCol.delete_many({'id': user_id})
 
     async def remove_ban(self, id):
         ban_status = dict(
@@ -106,7 +106,7 @@ class Database:
             banned_on=datetime.date.max.isoformat(),
             ban_reason=''
         )
-        user = await self.userCol.find_one({'id': int(id)})
+        user = await self.userCol.find_one({'id': id})
         return user.get('ban_status', default)
 
     async def get_all_banned_users(self):
