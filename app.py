@@ -64,7 +64,7 @@ def homepage():
 
 
 @app.route("/callback", methods=['POST'])
-async def callback():
+def callback():
     signature = request.headers['X-Line-Signature']
     # get request body as text
     body = request.get_data(as_text=True)
@@ -79,7 +79,7 @@ async def callback():
     for event in events:
         translated = ""
         print("event==>", event)
-        langs = await get_prefered_language(event.source)
+        langs = get_prefered_language(event.source)
         print("langs@81",langs)
         if not langs:
             # ask for language preference for first time
@@ -93,7 +93,7 @@ async def callback():
             return
         
         if text[0,4]=="/lang":
-            res = await lang_update(event.source,text)
+            res = lang_update(event.source,text)
             print ("res==>", res)
             if not res:
                 translated = "Language setting failed try again with /lang \ne.g /lang en co "
@@ -116,7 +116,7 @@ async def callback():
 
     return 'OK'
 
-
+print( __name__)
 if __name__ == "__main__":
     arg_parser = ArgumentParser(
         usage='Usage: python ' + __file__ + ' [--port <port>] [--help]'
