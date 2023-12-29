@@ -19,13 +19,6 @@ async def revertMessage(source, msg):
     if msg is None:
         return
 
-    langs = await get_prefered_language(source)
-    print("langs@21",langs)
-    if not langs:
-        # ask for language preference for first time
-        print("not langs")
-        return "Language setting failed.\nen-ko are set as Default languages.\nTo Change the default settings, send command  /lang <> <> \ne.g /lang en ko "
-    
     # check /lang command
     words = msg.split()
     if words[0]=="/lang":
@@ -41,6 +34,12 @@ async def revertMessage(source, msg):
         return f"set language by giving Command /lang <> <> \n{print_supported_languages()}"
     else:
         #normal translation function
+        langs = await get_prefered_language(source)
+        print("langs@21",langs)
+        if not langs:
+        # ask for language preference for first time
+            print("not langs")
+            return "Language setting failed.\nen-ko are set as Default languages.\nTo Change the default settings, send command  /lang <> <> \ne.g /lang en ko "
         print("else")
         return await translate_text(msg,langs)
 
