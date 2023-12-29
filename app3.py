@@ -51,7 +51,6 @@ if __name__ == '__main__':
     app = web.Application()
     app.router.add_post('/callback', handle)
 
-    import os
     port = int(os.environ.get("PORT", 8080))
 
-    web.run_app(app, host='0.0.0.0', port=port)
+    # web.run_app(app, host='0.0.0.0', port=port)
