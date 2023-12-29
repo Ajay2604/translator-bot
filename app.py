@@ -50,17 +50,26 @@ async def reply(reply_token, reply_message):
 
 from argparse import ArgumentParser
 
-if __name__ == "__main__":
-    arg_parser = ArgumentParser(
-        usage='Usage: python ' + __file__ + ' [--port <port>] [--help]'
-    )
-    arg_parser.add_argument('-p', '--port', type=int, default=8000, help='port')
-    arg_parser.add_argument('-d', '--debug', default=False, help='debug')
-    options = arg_parser.parse_args()
+# if __name__ == "__main__":
+#     arg_parser = ArgumentParser(
+#         usage='Usage: python ' + __file__ + ' [--port <port>] [--help]'
+#     )
+#     arg_parser.add_argument('-p', '--port', type=int, default=8000, help='port')
+#     arg_parser.add_argument('-d', '--debug', default=False, help='debug')
+#     options = arg_parser.parse_args()
 
+#     app = web.Application()
+#     app.router.add_post('/callback', handle)
+
+#     port = int(os.environ.get("PORT", 8080))
+
+#     web.run_app(app, host='0.0.0.0',debug=options.debug, port=options.port)
+
+if __name__ == '__main__':
     app = web.Application()
     app.router.add_post('/callback', handle)
 
+    import os
     port = int(os.environ.get("PORT", 8080))
 
-    web.run_app(app, host='0.0.0.0',debug=options.debug, port=options.port)
+    web.run_app(app, host='0.0.0.0', port=port)
