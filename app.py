@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-# Main 
-
-=======
->>>>>>> parent of db1f673 (try with chatgpt)
 import os
 import sys
 from argparse import ArgumentParser
@@ -37,9 +32,9 @@ app = Flask(__name__)
 
 # get channel_secret and channel_access_token from your environment variable
 channel_secret = os.getenv('LINE_CHANNEL_SECRET', None)
-
+channel_secret = "08b360ffb5ce55a583e1714f9ec01639"
 channel_access_token = os.getenv('LINE_CHANNEL_ACCESS_TOKEN', None)
-
+channel_access_token = "b6QCoss7UIsWWEv0YjpiUZlRFGTEKOGxrQJ6ate4xMOfjRTaJSlaLP/yWi1G9Ry9y231IeERlfPgDy9exgigZYiheJy9wdGoe2+owPc1u1xK8PagSnpcll1dEnG6Ge4li46MwvbH+B1N+6jOGpfz4QdB04t89/1O/w1cDnyilFU="
 if channel_secret is None:
     print('Specify LINE_CHANNEL_SECRET as environment variable.')
     sys.exit(1)
