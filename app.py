@@ -1,7 +1,6 @@
 import os
 import sys
 from argparse import ArgumentParser
-import asyncio
 
 from handlers.database import db
 from handlers.prefered_language_handler import get_prefered_language, lang_update

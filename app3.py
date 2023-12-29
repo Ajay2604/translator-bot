@@ -7,22 +7,47 @@ import os
 import icecream
 from datetime import datetime, date, timedelta
 
+from handlers.database import db
+from handlers.prefered_language_handler import get_prefered_language, lang_update
+from handlers.translate_text import translate_text, print_supported_languages
+
 
 channel_secret = os.getenv('LINE_CHANNEL_SECRET', None)
 channel_access_token = os.getenv('LINE_CHANNEL_ACCESS_TOKEN', None)
 
-async def homepage(request):
-    # Get current time
-    # the_time = datetime.now().strftime("%m-%d-%Y %H:%M%p")
+async def revertMessage(source, msg):
+    if msg is None:
+        return
+
+    langs = await get_prefered_language(source)
+    print("langs@21",langs)
+    if not langs:
+        # ask for language preference for first time
+        print("not langs")
+        return "Language setting failed try again with /lang \ne.g /lang en co "
     
-    # Render HTML template with time and image
-    print("in the get")
-    page_content = """
+    # check /lang command
+    if msg[0,4]=="/lang":
+        res = await lang_update(source,msg)
+        print ("res==>", res)
+        if not res:
+            return "Language setting failed try again with /lang \ne.g /lang en co "
+    elif msg[0,4]=="/help":
+        return f"set language by Giving Command /lang <> <> \n{print_supported_languages()}"
+    else:
+        #normal translation function
+        print("else")
+        return await translate_text(msg,langs)
+
+async def homepage(request):
+
+    the_time = datetime.now().strftime("%m-%d-%Y %H:%M%p")
+    page_content ="""
     <h1>Hello Translator-Bot</h1>
-    <p>It is currently .</p>
+    <p>It is currently {time}.</p>
 
     <img src="http://loremflickr.com/600/400">
-    """
+    """.format(time=the_time)
     return web.Response(text=page_content, content_type='text/html')
 
 async def handle(request):
@@ -32,9 +57,10 @@ async def handle(request):
     # Extract necessary information from the request
     reply_token = request_json['events'][0]['replyToken']
     message_text = request_json['events'][0]['message']['text']
-
+    source = request_json['events'][0]['source']
     # Your bot logic goes here
-    reply_message = f"You said: {message_text}"
+    # reply_message = f"You said: {message_text}"
+    reply_message = await revertMessage(source,message_text)
 
     # Send the reply message
     await reply(reply_token, reply_message)
