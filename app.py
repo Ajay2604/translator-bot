@@ -1,5 +1,8 @@
+<<<<<<< HEAD
 # Main 
 
+=======
+>>>>>>> parent of db1f673 (try with chatgpt)
 import os
 import sys
 from argparse import ArgumentParser
