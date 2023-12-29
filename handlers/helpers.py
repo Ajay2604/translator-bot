@@ -1,4 +1,5 @@
 import re
+from googletrans import LANGUAGES
 
 def parse_langs(input_str):
     langs = []
@@ -9,10 +10,12 @@ def parse_langs(input_str):
     for match in matches:
         lang_code = match.strip()
         if len(lang_code) == 2:
+            if not (lang_code in LANGUAGES):
+                return False
             langs.append(lang_code)
     return langs
 
-#usage
-# str = "/lang   en  ko jp"
+# # usage
+# str = "/lang     ak ko ja"
 # langs = parse_langs(str)
 # print(langs)
