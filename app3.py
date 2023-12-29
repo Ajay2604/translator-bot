@@ -30,13 +30,13 @@ async def revertMessage(source, msg):
     words = msg.split()
     if words[0]=="/lang":
         print("langs set")
-        res = await lang_update(source,msg)
+        res = await lang_update(source,[words[1],words[2]])
         print ("res==>", res)
         if not res:
             return "Language setting failed try again with /lang \ne.g /lang en co "
     elif words[0]=="/help":
         print("langs help")
-        return f"set language by Giving Command /lang <> <> \n{print_supported_languages()}"
+        return f"set language by giving Command /lang <> <> \n{print_supported_languages()}"
     else:
         #normal translation function
         print("else")
