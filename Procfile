@@ -1,1 +1,1 @@
-web: gunicorn --bind 0.0.0.0 --worker-class aiohttp.worker.GunicornWebWorker app3:app
+web: gunicorn -w 4 -b 0.0.0.0:$PORT app:app
