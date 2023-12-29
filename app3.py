@@ -39,7 +39,7 @@ async def revertMessage(source, msg):
         if not langs:
         # ask for language preference for first time
             print("not langs")
-            return "Language setting failed.\nen-ko are set as Default languages.\nTo Change the default settings, send command  /lang <> <> \ne.g /lang en ko "
+            return "\nEn-ko are set as Default languages.\nTo Change the default settings, send command  /lang <> <> \ne.g /lang en ko\nFor list of languages type /help"
         print("else")
         return await translate_text(msg,langs)
 
