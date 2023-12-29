@@ -24,7 +24,7 @@ e.g /lang en ja
 
 langSetFailedMessage =  """Language setting failed.
 \nTry again with correct spell.
-\n Type /help for more"""
+\nType /help for more"""
 
 
 async def revertMessage(source, msg):
