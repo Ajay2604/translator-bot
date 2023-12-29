@@ -14,6 +14,7 @@ async def homepage(request):
     # the_time = datetime.now().strftime("%m-%d-%Y %H:%M%p")
     
     # Render HTML template with time and image
+    print("in the get")
     return """
     <h1>Hello Translator-Bot</h1>
     <p>It is currently .</p>
