@@ -22,27 +22,29 @@ async def revertMessage(source, msg):
     # check /lang command
     words = msg.split()
     if words[0]=="/lang":
-        # print("langs set")
         if len(words) <3:
             return "Invalid command"
+        
         res = await lang_update(source,msg)
-        # print ("res==>", res)
         if not res:
-            return "Language setting failed.\nTry again with correct spell.\n Type /help for more"
+            return """Language setting failed.
+            \nTry again with correct spell.
+            \n Type /help for more"""
         else:
             return f"Language setting complete for {res[0]} & {res[1]}"
     elif words[0]=="/help":
-        # print("langs help")
         return f"set language by giving Command /lang <> <> \n{print_supported_languages()}"
     else:
         #normal translation function
         langs = await get_prefered_language(source)
-        # print("langs@21",langs)
+        
         if not langs:
-        # ask for language preference for first time
-            # print("not langs")
-            return "En-ja are set as Default languages.\nTo Change the default settings, send command  /lang <> <> \ne.g /lang en ja\nFor list of languages type /help"
-        # print("else")
+            # ask for language preference for first time
+            return """English-Japanese are set as default languages.\n
+            To Change the default settings, send command  /lang <> <> 
+            e.g /lang en ja
+            \nFor list of languages type /help
+            """
         return await translate_text(msg,langs)
 
 async def homepage(request):
