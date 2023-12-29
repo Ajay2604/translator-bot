@@ -26,7 +26,7 @@ async def lang_update(source,msgArgs):
     elif(source["type"] == "group"):
         group = await db.is_group_exist(source["groupId"])
         if group:
-            await db.user_langs_update(source['user_id',langs])
+            await db.group_langs_update(source['groupId',langs])
             return True
     return False
     
