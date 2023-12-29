@@ -12,7 +12,7 @@ def print_supported_languages():
             str = str + (f"{name} ({code})\n")
     return str
 
-def translate_text(text, langs): # translate text to/from Korean and English
+async def translate_text(text, langs): # translate text to/from Korean and English
     lang1 = langs[0]
     lang2 = langs[1]
     srcLang = translator.detect(text).lang # detect the source 
