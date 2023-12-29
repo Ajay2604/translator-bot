@@ -8,6 +8,19 @@ import os
 channel_secret = os.getenv('LINE_CHANNEL_SECRET', None)
 channel_access_token = os.getenv('LINE_CHANNEL_ACCESS_TOKEN', None)
 
+def homepage(request):
+    print(request)
+    # Get current time
+    # the_time = datetime.now().strftime("%m-%d-%Y %H:%M%p")
+    
+    # Render HTML template with time and image
+    return """
+    <h1>Hello Translator-Bot</h1>
+    <p>It is currently {}.</p>
+
+    <img src="http://loremflickr.com/600/400">
+    """.format(time="the_time")
+
 async def handle(request):
     request_json = await request.json()
     print(request_json)
@@ -49,6 +62,7 @@ async def reply(reply_token, reply_message):
 
 if __name__ == '__main__':
     app = web.Application()
+    app.router.add_get('/', homepage)
     app.router.add_post('/callback', handle)
 
     port = int(os.environ.get("PORT", 8080))
