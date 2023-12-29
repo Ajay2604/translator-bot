@@ -22,25 +22,25 @@ async def revertMessage(source, msg):
     # check /lang command
     words = msg.split()
     if words[0]=="/lang":
-        print("langs set")
+        # print("langs set")
         res = await lang_update(source,msg)
-        print ("res==>", res)
+        # print ("res==>", res)
         if not res:
             return "Language setting failed try again with /lang \ne.g /lang en co "
         else:
             return f"Language setting complete for {words[1]} & {words[2]}"
     elif words[0]=="/help":
-        print("langs help")
+        # print("langs help")
         return f"set language by giving Command /lang <> <> \n{print_supported_languages()}"
     else:
         #normal translation function
         langs = await get_prefered_language(source)
-        print("langs@21",langs)
+        # print("langs@21",langs)
         if not langs:
         # ask for language preference for first time
-            print("not langs")
-            return "\nEn-ko are set as Default languages.\nTo Change the default settings, send command  /lang <> <> \ne.g /lang en ko\nFor list of languages type /help"
-        print("else")
+            # print("not langs")
+            return "En-ko are set as Default languages.\nTo Change the default settings, send command  /lang <> <> \ne.g /lang en ko\nFor list of languages type /help"
+        # print("else")
         return await translate_text(msg,langs)
 
 async def homepage(request):
@@ -56,7 +56,7 @@ async def homepage(request):
 
 async def handle(request):
     request_json = await request.json()
-    print(request_json)
+    # print(request_json)
 
     # Extract necessary information from the request
     reply_token = request_json['events'][0]['replyToken']
