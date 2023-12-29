@@ -30,7 +30,7 @@ async def revertMessage(source, msg):
     words = msg.split()
     if words[0]=="/lang":
         print("langs set")
-        res = await lang_update(source,[words[1],words[2]])
+        res = await lang_update(source,msg)
         print ("res==>", res)
         if not res:
             return "Language setting failed try again with /lang \ne.g /lang en co "
