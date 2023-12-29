@@ -13,9 +13,11 @@ def parse_langs(input_str):
             if not (lang_code in LANGUAGES):
                 return False
             langs.append(lang_code)
+    if len(langs) < 2:
+        return False
     return langs
 
-# # usage
-# str = "/lang     ak ko ja"
+# # # usage
+# str = "/lang     ef ko"
 # langs = parse_langs(str)
 # print(langs)
