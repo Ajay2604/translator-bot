@@ -40,7 +40,8 @@ async def revertMessage(source, msg):
         
         if not langs:
             # ask for language preference for first time
-            return """English-Japanese are set as default languages.\n
+            return """Thank you for using Translation bot.
+            English-Japanese are set as default languages.\n
             To Change the default settings, send command  /lang <> <> 
             e.g /lang en ja
             \nFor list of languages available Type: /help
