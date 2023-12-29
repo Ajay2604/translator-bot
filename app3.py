@@ -5,6 +5,8 @@ from aiohttp import web
 import json
 import os
 import icecream
+from datetime import datetime, date, timedelta
+
 
 channel_secret = os.getenv('LINE_CHANNEL_SECRET', None)
 channel_access_token = os.getenv('LINE_CHANNEL_ACCESS_TOKEN', None)
@@ -15,12 +17,13 @@ async def homepage(request):
     
     # Render HTML template with time and image
     print("in the get")
-    return """
+    page_content = """
     <h1>Hello Translator-Bot</h1>
     <p>It is currently .</p>
 
     <img src="http://loremflickr.com/600/400">
     """
+    return web.Response(text=page_content, content_type='text/html')
 
 async def handle(request):
     request_json = await request.json()
