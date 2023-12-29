@@ -51,4 +51,7 @@ if __name__ == '__main__':
     app = web.Application()
     app.router.add_post('/callback', handle)
 
-    web.run_app(app, host='0.0.0.0', port=8080)
+    # Explicitly assign the app variable
+    web_app = app
+
+    web.run_app(web_app, host='0.0.0.0', port=8080)
