@@ -23,6 +23,8 @@ async def revertMessage(source, msg):
     words = msg.split()
     if words[0]=="/lang":
         # print("langs set")
+        if words[1] is None or words[2] is None:
+            return "Invalid command"
         res = await lang_update(source,msg)
         # print ("res==>", res)
         if not res:
