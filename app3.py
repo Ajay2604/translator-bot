@@ -9,7 +9,7 @@ channel_secret = os.getenv('LINE_CHANNEL_SECRET', None)
 channel_access_token = os.getenv('LINE_CHANNEL_ACCESS_TOKEN', None)
 
 def homepage(request):
-    print(request)
+    # print(request)
     # Get current time
     # the_time = datetime.now().strftime("%m-%d-%Y %H:%M%p")
     
