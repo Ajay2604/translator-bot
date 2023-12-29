@@ -1,1 +1,1 @@
-web: gunicorn app:app --log-file=-p
+web: gunicorn --bind 0.0.0.0 --worker-class aiohttp.worker.GunicornWebWorker app3:app
