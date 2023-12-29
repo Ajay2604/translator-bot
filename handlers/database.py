@@ -16,7 +16,7 @@ class Database:
         return dict(
             id=id,
             join_date=datetime.date.today().isoformat(),
-            languages = ['en','ko'],
+            languages = ['en','ja'],
             ban_status=dict(
                 is_banned=False,
                 ban_duration=0,
@@ -29,7 +29,7 @@ class Database:
         return dict(
             id=id,
             join_date=datetime.date.today().isoformat(),
-            languages = ['en','ko'],
+            languages = ['en','ja'],
             ban_status=dict(
                 is_banned=False,
                 ban_duration=0,
