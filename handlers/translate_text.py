@@ -21,10 +21,10 @@ async def translate_text(text, langs): # translate text to/from langs
     elif srcLang == lang2:
         translation = translator.translate(text, dest=lang1)
     else:
-        return f'''Unsupported source language: {LANGUAGES[srcLang]} 
-                \nIf it is a mistake, try to change grammer of your text.
-                \nYou can change language prefrence by sending /lang <> <> 
-                \neg. '/lang en ko' for English-korean 
+        return f'''Unsupported source language detected: {LANGUAGES[srcLang]} 
+                \nIf it is a mistake, try to change Grammer of your text.
+                \nYou can change language preference by sending /lang <> <> 
+                \neg. '/lang en ko' for English-Korean 
                 \n'''
     # {print_supported_languages()}
 
