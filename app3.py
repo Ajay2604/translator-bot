@@ -43,7 +43,7 @@ async def revertMessage(source, msg):
             return """English-Japanese are set as default languages.\n
             To Change the default settings, send command  /lang <> <> 
             e.g /lang en ja
-            \nFor list of languages type /help
+            \nFor list of languages available Type: /help
             """
         return await translate_text(msg,langs)
 
