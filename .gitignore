@@ -79,6 +79,7 @@ env8
 transtrial.py
 app2.py
 pytesting.py
+pytest2.py
 
 # celery beat schedule file
 celerybeat-schedule

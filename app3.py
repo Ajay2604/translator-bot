@@ -24,16 +24,17 @@ async def revertMessage(source, msg):
     if not langs:
         # ask for language preference for first time
         print("not langs")
-        return "Language setting failed.\nen-ko are set as Default languages.\nTo Change the default settings, send command  /lang <> <> \ne.g /lang en co "
+        return "Language setting failed.\nen-ko are set as Default languages.\nTo Change the default settings, send command  /lang <> <> \ne.g /lang en ko "
     
     # check /lang command
-    if msg[0,4]=="/lang":
+    words = msg.split()
+    if words[0]=="/lang":
         print("langs set")
         res = await lang_update(source,msg)
         print ("res==>", res)
         if not res:
             return "Language setting failed try again with /lang \ne.g /lang en co "
-    elif msg[0,4]=="/help":
+    elif words[0]=="/help":
         print("langs help")
         return f"set language by Giving Command /lang <> <> \n{print_supported_languages()}"
     else:
