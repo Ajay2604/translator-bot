@@ -15,6 +15,18 @@ from handlers.translate_text import translate_text, print_supported_languages
 channel_secret = os.getenv('LINE_CHANNEL_SECRET', None)
 channel_access_token = os.getenv('LINE_CHANNEL_ACCESS_TOKEN', None)
 
+firstGreetingMessage = """Thank you for using Translation bot.\n
+English-Japanese are set as default languages.\n
+To Change the default settings, send command  /lang <> <> 
+e.g /lang en ja
+\nFor list of languages available Type: /help
+"""
+
+langSetFailedMessage =  """Language setting failed.
+\nTry again with correct spell.
+\n Type /help for more"""
+
+
 async def revertMessage(source, msg):
     if msg is None:
         return
@@ -27,9 +39,7 @@ async def revertMessage(source, msg):
         
         res = await lang_update(source,msg)
         if not res:
-            return """Language setting failed.
-            \nTry again with correct spell.
-            \n Type /help for more"""
+            return langSetFailedMessage
         else:
             return f"Language setting complete for {res[0]} & {res[1]}"
     elif words[0]=="/help":
@@ -40,12 +50,7 @@ async def revertMessage(source, msg):
         
         if not langs:
             # ask for language preference for first time
-            return """Thank you for using Translation bot.
-            English-Japanese are set as default languages.\n
-            To Change the default settings, send command  /lang <> <> 
-            e.g /lang en ja
-            \nFor list of languages available Type: /help
-            """
+            return firstGreetingMessage
         return await translate_text(msg,langs)
 
 async def homepage(request):
