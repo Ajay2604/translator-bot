@@ -34,6 +34,8 @@ async def revertMessage(source, msg):
         print ("res==>", res)
         if not res:
             return "Language setting failed try again with /lang \ne.g /lang en co "
+        else:
+            return f"Language setting complete for {words[1]& words[2]}"
     elif words[0]=="/help":
         print("langs help")
         return f"set language by giving Command /lang <> <> \n{print_supported_languages()}"
