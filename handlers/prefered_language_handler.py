@@ -18,6 +18,8 @@ async def get_prefered_language(source):
 
 async def lang_update(source,msgArgs):
     langs = parse_langs(msgArgs)
+    if langs is False:
+        return False
     if(source["type"] == "user"):
         user = await db.is_user_exist(source["userId"])
         if user :
