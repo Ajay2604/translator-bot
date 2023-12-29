@@ -16,10 +16,10 @@ async def homepage(request):
     # Render HTML template with time and image
     return """
     <h1>Hello Translator-Bot</h1>
-    <p>It is currently {time}.</p>
+    <p>It is currently .</p>
 
     <img src="http://loremflickr.com/600/400">
-    """.format(time="the_time")
+    """
 
 async def handle(request):
     request_json = await request.json()
