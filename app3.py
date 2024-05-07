@@ -72,6 +72,7 @@ async def handle(request):
     reply_token = request_json['events'][0]['replyToken']
     message_text = request_json['events'][0]['message']['text']
     source = request_json['events'][0]['source']
+    print(source)
     # Your bot logic goes here
     # reply_message = f"You said: {message_text}"
     reply_message = await revertMessage(source,message_text)
