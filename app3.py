@@ -106,10 +106,11 @@ async def reply(reply_token, reply_message):
             return await response.text()
 
 if __name__ == '__main__':
+    print("App is running")
     app = web.Application()
     app.router.add_get('/', homepage)
     app.router.add_post('/callback', handle)
 
     port = int(os.environ.get("PORT", 8080))
-
+    print(port)
     web.run_app(app, host='0.0.0.0', port=port)
